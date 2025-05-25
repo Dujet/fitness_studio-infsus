@@ -5,6 +5,20 @@ const getAllTermini = async () => {
   return res.rows;
 };
 
+const getAllTerminiWithDetails = async () => {
+  const res = await pool.query(`
+    SELECT 
+  tr.id_t, tr.naziv_t, tr.opis_t, tr.kapacitet, te.id, te.datum, te.vrijeme AS vrijeme_pocetka, k.ime, k.prezime, k.email
+    FROM termin te
+    NATURAL JOIN trening tr
+    NATURAL JOIN poducava p
+    JOIN instruktor i ON i.oib = p.oib_inst
+    NATURAL JOIN korisnik k
+    ORDER BY te.datum, te.vrijeme;
+  `);
+  return res.rows;
+}
+
 const getTerminById = async (id) => {
   const res = await pool.query('SELECT * FROM termin WHERE id = $1', [id]);
   return res.rows[0];
@@ -36,4 +50,5 @@ module.exports = {
   createTermin,
   updateTermin,
   deleteTermin,
+  getAllTerminiWithDetails,
 };

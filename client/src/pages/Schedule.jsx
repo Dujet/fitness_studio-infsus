@@ -62,23 +62,42 @@ const MOCK_TERMS = [
     },
 ];
 
+const toLocalDateString = (isoString) => {
+  const date = new Date(isoString);
+  const offset = date.getTimezoneOffset();
+  const localDate = new Date(date.getTime() - offset * 60 * 1000);
+  return localDate.toISOString().split("T")[0];
+};
+
 export default function Schedule() {
     const [terms, setTerms] = useState([]);
     const [filter, setFilter] = useState({ type: "", instructor: "", date: "" });
     const { isLoggedIn } = useAuth();
-    const instructors = [...new Set(MOCK_TERMS.map(term => term.instructor))];
+    const [instructors, setInstructors] = useState([]);
     const types = [...new Set(MOCK_TERMS.map(term => term.type))];
 
     useEffect(() => {
-        // Simulate fetch from backend
-        setTerms(MOCK_TERMS);
+        fetch('/api/termin/details')
+            .then(res => res.json())
+            .then(data => {
+                setTerms(data);
+                // setTerms(MOCK_TERMS);
+            })
+            .catch(err => console.error("Error fetching terms:", err));
     }, []);
+
+    useEffect(() => {
+        fetch('/api/trener')
+            .then(res => res.json())
+            .then(data => {setInstructors(data.map(trener => `${trener.ime} ${trener.prezime}`))})
+            .catch(err => console.error("Error fetching instructors:", err));
+    })
 
     const filtered = terms.filter((term) => {
         return (
             (filter.type === "" || term.type === filter.type) &&
-            (filter.instructor === "" || term.instructor === filter.instructor) &&
-            (filter.date === "" || term.date.startsWith(filter.date))
+            (filter.instructor === "" || `${term.ime} ${term.prezime}` === filter.instructor) &&
+            (filter.date === "" || filter.date === toLocalDateString(term.datum))
         );
     });
 
@@ -88,23 +107,6 @@ export default function Schedule() {
 
             <Paper elevation={3} sx={{ padding: "1rem", marginBottom: "2rem" }}>
                 <Grid container spacing={2} sx={{ mb: 3 }}>
-                    <Grid item xs={12} md={4}>
-                        <TextField
-                            fullWidth
-                            select
-                            label="Vrsta treninga"
-                            value={filter.type}
-                            onChange={(e) => setFilter({ ...filter, type: e.target.value })}
-                            sx={{ minWidth: 150 }}
-                        >
-                            <MenuItem value="">Sve</MenuItem>
-                            {types.map((type) => (
-                                <MenuItem key={type} value={type}>
-                                    {type}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                    </Grid>
 
                     <Grid item xs={12} md={4}>
                         <TextField
@@ -150,21 +152,21 @@ export default function Schedule() {
                                     borderRadius: "0.5rem",
                                 }}
                             >
-                                <Typography variant="h6">{term.name}</Typography>
+                                <Typography variant="h6">{term.naziv_t}</Typography>
                                 <Typography>
-                                    📅 {new Date(term.date).toLocaleString("hr-HR")}
+                                    Instruktor: {term.ime} {term.prezime}
                                 </Typography>
-                                <Typography>👤 Instruktor: {term.instructor}</Typography>
-                                <Typography>🏷️ Vrsta: {term.type}</Typography>
                                 <Typography>
-                                    🧍 Slobodna mjesta: {term.spotsLeft > 0 ? term.spotsLeft : "Nema"}
+                                    📅 {new Date(term.datum).toLocaleDateString("hr-HR") + term.vrijeme_pocetka}
                                 </Typography>
-                                {isLoggedIn && <Button
+                                <Typography>
+                                    🧍 Kapacitet: {term.kapacitet}
+                                </Typography>
+                                {<Button
                                     variant="contained"
-                                    disabled={term.spotsLeft === 0}
                                     sx={{ mt: 1 }}
                                 >
-                                    Rezerviraj
+                                    Detalji
                                 </Button>}
                             </div>
                         </Grid>

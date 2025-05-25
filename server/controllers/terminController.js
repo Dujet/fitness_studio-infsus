@@ -10,6 +10,16 @@ const getAllTermini = async (req, res) => {
   }
 };
 
+const getAllTerminiWithDetails = async (req, res) => {
+  try {
+    const termini = await Termin.getAllTerminiWithDetails();
+    res.json(termini);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
+  }
+}
+
 const getTerminById = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -67,4 +77,5 @@ module.exports = {
   createTermin,
   updateTermin,
   deleteTermin,
+  getAllTerminiWithDetails,
 };
