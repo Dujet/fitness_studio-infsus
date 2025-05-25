@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { TextField, MenuItem, Grid, Typography, Button, Paper, Box } from "@mui/material";
 import { useAuth } from "../context/AuthContext";
+import TrainingDetailsModal from "../components/TrainingDetailsModal";
+import TrainingCard from "../components/TrainingCard";
 
 // Example mock data (simulate fetched from backend)
 const MOCK_TERMS = [
@@ -74,7 +76,7 @@ export default function Schedule() {
     const [filter, setFilter] = useState({ type: "", instructor: "", date: "" });
     const { isLoggedIn } = useAuth();
     const [instructors, setInstructors] = useState([]);
-    const types = [...new Set(MOCK_TERMS.map(term => term.type))];
+    const [selectedTerm, setSelectedTerm] = useState(null);
 
     useEffect(() => {
         fetch('/api/termin/details')
@@ -145,34 +147,20 @@ export default function Schedule() {
                 ) : (
                     filtered.map((term) => (
                         <Grid item xs={12} key={term.id}>
-                            <div
-                                style={{
-                                    border: "1px solid #ccc",
-                                    padding: "1rem",
-                                    borderRadius: "0.5rem",
-                                }}
-                            >
-                                <Typography variant="h6">{term.naziv_t}</Typography>
-                                <Typography>
-                                    Instruktor: {term.ime} {term.prezime}
-                                </Typography>
-                                <Typography>
-                                    📅 {new Date(term.datum).toLocaleDateString("hr-HR") + term.vrijeme_pocetka}
-                                </Typography>
-                                <Typography>
-                                    🧍 Kapacitet: {term.kapacitet}
-                                </Typography>
-                                {<Button
-                                    variant="contained"
-                                    sx={{ mt: 1 }}
-                                >
-                                    Detalji
-                                </Button>}
-                            </div>
+                            <TrainingCard
+                                term={term}
+                                onDetailsClick={(term) =>{setSelectedTerm(term)}}
+                            />
                         </Grid>
                     ))
                 )}
             </Grid>
+
+            <TrainingDetailsModal
+                open={Boolean(selectedTerm)}
+                session={selectedTerm}
+                onClose={() => setSelectedTerm(null)}
+            />
         </div>
     );
 }
