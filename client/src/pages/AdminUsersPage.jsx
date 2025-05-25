@@ -47,7 +47,7 @@ export default function AdminUsersPage() {
 
     const openEditDialog = (user) => {
         setEditingUser(user);
-        setForm({ username: user.username, email: user.email, role: user.role });
+        setForm({ oib: user.oib, ime: user.ime, prezime: user.prezime, email: user.email, lozinka: user.lozinka });
         setOpenDialog(true);
     };
 
