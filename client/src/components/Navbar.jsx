@@ -40,7 +40,7 @@ export default function Navbar() {
             <Button color="inherit" component={Link} to="/classes">Raspored</Button>
             <Button color="inherit" component={Link} to="/login">Login</Button>
             <Button color="inherit" component={Link} to="/profile">Profile</Button>
-            <Button color="inherit" component={Link} to="/admin/terms">Admin</Button>
+            <Button color="inherit" component={Link} to="/admin">Admin</Button>
             <Switch checked={isLoggedIn} onChange={handleLoginToggle}></Switch>
             <Button color="inherit" onClick={handleAddTraining}>Add training session (test)</Button>
         </Toolbar>

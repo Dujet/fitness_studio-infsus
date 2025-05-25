@@ -6,7 +6,7 @@ import Login from './pages/Login'
 import Navbar from './components/Navbar'
 import './App.css'
 import Profile from './pages/Profile'
-import AdminTerms from './pages/AdminTerms'
+import AdminUsersPage from './pages/AdminUsersPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -19,7 +19,7 @@ function App() {
         <Route path="/classes" element={<Classes />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/admin/terms" element={<AdminTerms />} />
+        <Route path="/admin" element={<AdminUsersPage />} />
       </Routes>
     </BrowserRouter>
   )

@@ -6,13 +6,6 @@ import {
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 
-// Mock instructors and terms
-const INSTRUCTORS = ["Ana", "Ivan"];
-const INITIAL_TERMS = [
-  { id: 1, name: "Pilates", date: "2025-06-01T10:00", instructor: "Ana", type: "Pilates", spotsLeft: 5 },
-  { id: 2, name: "HIIT", date: "2025-06-02T18:00", instructor: "Ivan", type: "Kondicija", spotsLeft: 3 },
-];
-
 export default function AdminTerms() {
   const [terms, setTerms] = useState(INITIAL_TERMS);
   const [form, setForm] = useState({ id: null, name: "", date: "", instructor: "", type: "", spotsLeft: "" });
