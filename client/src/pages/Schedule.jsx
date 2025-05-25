@@ -194,6 +194,8 @@ export default function Schedule() {
                 open={Boolean(selectedTerm)}
                 session={selectedTerm}
                 onClose={() => setSelectedTerm(null)}
+                trainings={trainings}
+                onUpdate={() => fetchTerms()}
             />
 
             <CreateTrainingSessionModal

@@ -38,7 +38,7 @@ export default function TrainingCard({ term, onDetailsClick, onDelete }) {
         Instruktor: {term.ime} {term.prezime}
       </Typography>
       <Typography>
-        📅 {new Date(term.datum).toLocaleDateString("hr-HR") + " " + term.vrijeme_pocetka}
+        📅 {new Date(term.datum).toLocaleDateString("hr-HR") + " " + term.vrijeme}
       </Typography>
       <Typography>
         🧍 Kapacitet: {term.kapacitet}
@@ -48,7 +48,7 @@ export default function TrainingCard({ term, onDetailsClick, onDelete }) {
         sx={{ mt: 1 }}
         onClick={() => onDetailsClick(term)}
       >
-        Detalji
+        Uredi
       </Button>
       <IconButton
         aria-label='Delete'

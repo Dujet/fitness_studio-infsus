@@ -8,7 +8,7 @@ const getAllTermini = async () => {
 const getAllTerminiWithDetails = async () => {
   const res = await pool.query(`
     SELECT 
-  tr.id_t, tr.naziv_t, tr.opis_t, tr.kapacitet, te.id, te.datum, te.vrijeme AS vrijeme_pocetka, k.ime, k.prezime, k.email
+  tr.id_t, tr.naziv_t, tr.opis_t, tr.kapacitet, te.id, te.datum, te.vrijeme, k.ime, k.prezime, k.email
     FROM termin te
     NATURAL JOIN trening tr
     NATURAL JOIN poducava p
