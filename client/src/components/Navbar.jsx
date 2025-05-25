@@ -9,6 +9,30 @@ export default function Navbar() {
     const handleLoginToggle = () => {
         setIsLoggedIn((prev) => !prev);
     }
+
+    const handleAddTraining = async () => {
+        try {
+            const response = await fetch('/api/termin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id_t: 1,
+                    datum: '2025-06-07',
+                    vrijeme: '10:00:00'
+                })
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
+            const data = await response.json();
+            alert("POST successfuly, created termin with ID: " + data.id);
+        } catch (err) {
+            alert("POST failed: " + err.message);
+        }
+    };
+
     return (
         <AppBar>
         <Toolbar>
@@ -18,6 +42,7 @@ export default function Navbar() {
             <Button color="inherit" component={Link} to="/profile">Profile</Button>
             <Button color="inherit" component={Link} to="/admin/terms">Admin</Button>
             <Switch checked={isLoggedIn} onChange={handleLoginToggle}></Switch>
+            <Button color="inherit" onClick={handleAddTraining}>Add training session (test)</Button>
         </Toolbar>
         </AppBar>
     );

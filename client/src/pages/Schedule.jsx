@@ -78,6 +78,10 @@ export default function Schedule() {
     const [instructors, setInstructors] = useState([]);
     const [selectedTerm, setSelectedTerm] = useState(null);
 
+    const handleTermDeleted = (id) => {
+        setTerms((prevTerms) => prevTerms.filter((term) => term.id !== id));
+    };
+
     useEffect(() => {
         fetch('/api/termin/details')
             .then(res => res.json())
@@ -150,6 +154,7 @@ export default function Schedule() {
                             <TrainingCard
                                 term={term}
                                 onDetailsClick={(term) =>{setSelectedTerm(term)}}
+                                onDelete={handleTermDeleted}
                             />
                         </Grid>
                     ))
