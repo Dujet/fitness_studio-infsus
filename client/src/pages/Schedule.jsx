@@ -3,6 +3,7 @@ import { TextField, MenuItem, Grid, Typography, Button, Paper, Box } from "@mui/
 import { useAuth } from "../context/AuthContext";
 import TrainingDetailsModal from "../components/TrainingDetailsModal";
 import TrainingCard from "../components/TrainingCard";
+import CreateTrainingSessionModal from "../components/CreateTrainingSessionModal";
 
 // Example mock data (simulate fetched from backend)
 const MOCK_TERMS = [
@@ -77,10 +78,27 @@ export default function Schedule() {
     const { isLoggedIn } = useAuth();
     const [instructors, setInstructors] = useState([]);
     const [selectedTerm, setSelectedTerm] = useState(null);
+    const [createModalOpen, setCreateModalOpen] = useState(false);
+    const [trainings, setTrainings] = useState([]);
 
     const handleTermDeleted = (id) => {
         setTerms((prevTerms) => prevTerms.filter((term) => term.id !== id));
     };
+
+    const handleClickCreate = () => {
+        setCreateModalOpen(true);
+    }
+
+    const fetchTerms = () => {
+        fetch('/api/termin/details')
+            .then(res => res.json())
+            .then(data => {
+                setTerms(data);
+                // setTerms(MOCK_TERMS);
+            })
+            .catch(err => console.error("Error fetching terms:", err));
+    }
+
 
     useEffect(() => {
         fetch('/api/termin/details')
@@ -97,6 +115,13 @@ export default function Schedule() {
             .then(res => res.json())
             .then(data => {setInstructors(data.map(trener => `${trener.ime} ${trener.prezime}`))})
             .catch(err => console.error("Error fetching instructors:", err));
+    })
+
+    useEffect(() => {
+        fetch('/api/trening')
+            .then(res => res.json())
+            .then(data => setTrainings(data))
+            .catch(err => console.error("Error fetching trainings:", err));
     })
 
     const filtered = terms.filter((term) => {
@@ -161,10 +186,21 @@ export default function Schedule() {
                 )}
             </Grid>
 
+            <Button variant="contained" onClick={handleClickCreate} sx={{ mt: 5 }}>
+                Dodaj novi termin
+            </Button>
+
             <TrainingDetailsModal
                 open={Boolean(selectedTerm)}
                 session={selectedTerm}
                 onClose={() => setSelectedTerm(null)}
+            />
+
+            <CreateTrainingSessionModal
+                open={createModalOpen}
+                onClose={() => setCreateModalOpen(false)}
+                onCreate={() => fetchTerms()}
+                trainings={trainings}
             />
         </div>
     );

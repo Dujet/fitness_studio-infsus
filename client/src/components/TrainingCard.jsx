@@ -56,7 +56,7 @@ export default function TrainingCard({ term, onDetailsClick, onDelete }) {
         onClick={() => {
           if (window.confirm("Jeste li sigurni da želite obrisati ovaj termin?")) {
             handleDeleteTerm(term.id);
-            alert("Termin" + term.id + " obrisan.");
+            alert("Termin " + term.id + " obrisan.");
           }
         }}
       >
